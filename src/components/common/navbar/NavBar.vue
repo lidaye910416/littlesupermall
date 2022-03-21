@@ -22,6 +22,7 @@ export default {
 <style scoped>
 .nav-bar{
     display: flex;
+    
     line-height: 44px;
     /* 以上属性写了以后，如果没有内容，则不会发挥功效 */
     box-shadow: 0px 1px 1px rgba(100,100,100,0.1);

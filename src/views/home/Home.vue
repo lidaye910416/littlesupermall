@@ -5,17 +5,30 @@
       购物街
       </template>
     </nav-bar>
-    <h2>首页</h2>
+    <!-- <h2>首页</h2> -->
+    <home-swiper :banners="banners" >
+    </home-swiper>
+    <recommend-view :recommendInfo="recommend">
+    </recommend-view>
+    <feature-view/>
+    
   </div>
 </template>
 
 <script>
 import navbar from 'components/common/navbar/NavBar.vue';
-import {getHomeMultidata} from "network/home"
+import {getHomeMultidata} from "network/home";
+import homeswiper from './childcomp/HomeSwiper.vue'; 
+import recommendview from './childcomp/RecommendView.vue';
+import featureview from './childcomp/FeatureView.vue';
+// 上面的代码代表要在项目中不断进行解耦
 export default {
   components:
   {
-    'nav-bar': navbar  
+    'nav-bar': navbar,
+    'home-swiper': homeswiper,
+    'recommend-view': recommendview,
+    'feature-view': featureview,
   },
   data(){
     return{
@@ -36,8 +49,20 @@ export default {
 </script>
 
 <style scoped>
+#home{
+  padding-top: 44px;
+  height: 100vh;
+  position: relative;
+
+}
+
 .home-nav{
   background-color: var(--color-tint);
   color: #fff;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 9
 }
 </style>

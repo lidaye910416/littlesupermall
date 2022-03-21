@@ -32,6 +32,7 @@ export default {
     },
     computed:{
         isActivated(){
+            //当前路由中是否包含当前的页面。
             return this.$route.path.indexOf(this.page)===-1 ? false: true; 
         },
         activatedFontcolor(){

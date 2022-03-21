@@ -1,6 +1,6 @@
 <template>
   <router-view/>
-  <div id="nav">
+  <div id="tab">
     <main-tabbar></main-tabbar>
   </div>
 </template>
@@ -25,16 +25,16 @@ export default {
   color: #2c3e50;
 }
 
-#nav {
+#tab {
   padding: 30px;
 }
 
-#nav a {
+#tab a {
   font-weight: bold;
   color: #2c3e50;
 }
 
-#nav a.router-link-exact-active {
+#tab a.router-link-exact-active {
   color: #42b983;
 }
 </style>

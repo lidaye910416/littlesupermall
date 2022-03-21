@@ -1,5 +1,6 @@
 module.exports = {
     configureWebpack:{
+        devtool: 'source-map',
         resolve:{
             alias:{
                 //配置别名 
@@ -8,7 +9,8 @@ module.exports = {
                 'components':'@/components',
                 'network':'@/network',
                 'router':'@/router',
-            }
+            },
+            
         }
     }
 }
