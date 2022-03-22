@@ -6,21 +6,25 @@
       </template>
     </nav-bar>
     <!-- <h2>首页</h2> -->
-    <home-swiper :banners="banners" >
-    </home-swiper>
-    <recommend-view :recommendInfo="recommend">
-    </recommend-view>
+    <home-swiper :banners="banners" />
+    <recommend-view :recommendInfo="recommend"/>
     <feature-view/>
+    <tab-control :titles="['流行','新款','精选']" class="tabcontrol"/>
+    <goods-list :goods="getGoodSItem"/>
     
   </div>
 </template>
 
 <script>
 import navbar from 'components/common/navbar/NavBar.vue';
-import {getHomeMultidata} from "network/home";
+import tabcontrol from 'components/content/tabcontrol/TabControl.vue'
+import goodlist from 'components/content/goods/GoodsList.vue'
+
 import homeswiper from './childcomp/HomeSwiper.vue'; 
 import recommendview from './childcomp/RecommendView.vue';
 import featureview from './childcomp/FeatureView.vue';
+
+import {getHomeMultidata, getHomeGoods} from "network/home";
 // 上面的代码代表要在项目中不断进行解耦
 export default {
   components:
@@ -29,20 +33,53 @@ export default {
     'home-swiper': homeswiper,
     'recommend-view': recommendview,
     'feature-view': featureview,
+    'tab-control': tabcontrol,
+    'goods-list':goodlist
   },
   data(){
     return{
       banners:null,
-      recommend:null
+      recommend:null,
+      currentType:'pop',
+      goods:{
+        'pop':{page:0, list:[]},
+        'new':{page:0, list:[]},
+        'sell':{page:0, list:[]}
+      }
     }
+  },
+  computed:{
+    getGoodSItem(){
+
+      return this.goods[this.currentType].list
+    }
+  },
+  methods:{
+    getHomeMultidata(){
+      getHomeMultidata().then(res => {
+        this.banners = res.data.banner.list; //箭头函数的this是向层作用域上查找的。
+        this.recommend = res.data.recommend.list; //箭头函数的this是向层作用域上查找的。  
+        //外层this 就是一个vue实例
+      })
+    },
+    getHomeGoods(type){
+      const page = this.goods[type].page + 1;
+      // 每次调用这个函数请求，页面需要加1
+      getHomeGoods(type, page).then(res => {
+        this.goods[type].list.push(...res.data.list);
+        this.goods[type].page++ ;
+        //这里这个代码可能有问题y
+
+      })
+    }
+    
   },
   created(){
     //生命周期函数，组件一创建立马发送网络请求
-    getHomeMultidata().then(res=>{
-      this.banners = res.data.banner.list; //箭头函数的this是向层作用域上查找的。
-      this.recommend = res.data.recommend.list; //箭头函数的this是向层作用域上查找的。
-      //外层this 就是一个vue 实例
-    })  
+    this.getHomeMultidata();
+    this.getHomeGoods('pop');
+    this.getHomeGoods('new');
+    this.getHomeGoods('sell');
 
   }
 }
@@ -64,5 +101,10 @@ export default {
   right: 0;
   top: 0;
   z-index: 9
+}
+
+.tabcontrol{
+  position: sticky;
+  top:80px
 }
 </style>

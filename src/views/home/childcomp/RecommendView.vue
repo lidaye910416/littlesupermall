@@ -36,6 +36,9 @@ export default {
     display: flex;
     
 }
+.recommend-list li{
+    flex: 1;
+}
 
 .recommend-list li::marker{
     content: ' ' ;
@@ -44,7 +47,7 @@ export default {
 }
 
 .recommend-list li a img{
-    width: 85%;
+    width: 90px;
 }
 
 
