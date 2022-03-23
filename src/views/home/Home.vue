@@ -9,7 +9,8 @@
     <home-swiper :banners="banners" />
     <recommend-view :recommendInfo="recommend"/>
     <feature-view/>
-    <tab-control :titles="['流行','新款','精选']" class="tabcontrol"/>
+    <tab-control :titles="['流行','新款','精选']" class="tabcontrol"
+    @getcurrentItemIndex="getcurrentType(itemType)"/>
     <goods-list :goods="getGoodSItem"/>
     
   </div>
@@ -55,6 +56,10 @@ export default {
     }
   },
   methods:{
+    getcurrentType(type){
+      console.log(type);
+      this.currentType = type;
+    },
     getHomeMultidata(){
       getHomeMultidata().then(res => {
         this.banners = res.data.banner.list; //箭头函数的this是向层作用域上查找的。
