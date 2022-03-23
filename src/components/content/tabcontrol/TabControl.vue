@@ -31,6 +31,8 @@ export default {
     methods: {
             getcurrentIndex(index){
                 this.currentIndex = index;
+                this.$emit('getcurrentItem', this.titles[index])
+                // 自定义时间，将此时的选项发射出去。
             }
     },
 }
