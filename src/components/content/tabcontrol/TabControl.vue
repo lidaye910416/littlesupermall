@@ -20,7 +20,6 @@ export default {
             default(){
                 return [];
             }
-            
         },
     },
     data() {
@@ -32,9 +31,8 @@ export default {
     methods: {
             getcurrentIndex(index){
                 this.currentIndex = index;
-                console.log('tc组件中',this.typeIndex[index]);
                 this.$emit('getcurrentItemIndex', this.typeIndex[index])
-                // 自定义时间，将此时的选项发射出去。
+                // 自定义事件，将此时的选项发射出去。
             }
     },
 }

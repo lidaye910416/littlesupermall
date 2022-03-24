@@ -10,7 +10,8 @@
     <recommend-view :recommendInfo="recommend"/>
     <feature-view/>
     <tab-control :titles="['流行','新款','精选']" class="tabcontrol"
-    @getcurrentItemIndex="getcurrentType(itemType)"/>
+    @getcurrentItemIndex="getcurrentType"/>
+    <!-- 对自定义事件还需要仔细思考 -->
     <goods-list :goods="getGoodSItem"/>
     
   </div>
@@ -42,7 +43,7 @@ export default {
       banners:null,
       recommend:null,
       currentType:'pop',
-      goods:{
+      allgoods:{
         'pop':{page:0, list:[]},
         'new':{page:0, list:[]},
         'sell':{page:0, list:[]}
@@ -51,28 +52,32 @@ export default {
   },
   computed:{
     getGoodSItem(){
-
-      return this.goods[this.currentType].list
+      // console.log('计算属性中的this.allgoods',this.allgoods);
+      console.log('计算属性中的相应变量',this.currentType);
+      return this.allgoods[this.currentType].list
     }
   },
   methods:{
-    getcurrentType(type){
-      console.log(type);
-      this.currentType = type;
+    getcurrentType(ctype){
+      this.currentType = ctype;
+      console.log('home组件中的currentType',this.currentType);
     },
-    getHomeMultidata(){
+    getHomeMultidataCreated(){
       getHomeMultidata().then(res => {
         this.banners = res.data.banner.list; //箭头函数的this是向层作用域上查找的。
         this.recommend = res.data.recommend.list; //箭头函数的this是向层作用域上查找的。  
         //外层this 就是一个vue实例
       })
     },
-    getHomeGoods(type){
-      const page = this.goods[type].page + 1;
+    getHomeGoodsCreated(type){
+      const page = this.allgoods[type].page + 1;
       // 每次调用这个函数请求，页面需要加1
       getHomeGoods(type, page).then(res => {
-        this.goods[type].list.push(...res.data.list);
-        this.goods[type].page++ ;
+        // console.log('Promise中返回的数据',res.data.list);
+        // console.log('接收Promise中的数据前', this.allgoods);
+        this.allgoods[type].list.push(...res.data.list);
+        // console.log('接收Promise中的数据后', this.allgoods);
+        this.allgoods[type].page++ ;
         //这里这个代码可能有问题y
 
       })
@@ -81,10 +86,10 @@ export default {
   },
   created(){
     //生命周期函数，组件一创建立马发送网络请求
-    this.getHomeMultidata();
-    this.getHomeGoods('pop');
-    this.getHomeGoods('new');
-    this.getHomeGoods('sell');
+    this.getHomeMultidataCreated();
+    this.getHomeGoodsCreated('pop');
+    this.getHomeGoodsCreated('new');
+    this.getHomeGoodsCreated('sell');
 
   }
 }
