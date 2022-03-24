@@ -28,5 +28,8 @@ export default {
 </script>
 
 <style scoped>
-    
+    .goods-list{
+        display: flex;
+        width: 100vw;
+    }
 </style>

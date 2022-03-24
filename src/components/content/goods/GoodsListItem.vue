@@ -18,5 +18,12 @@ export default {
 </script>
 
 <style scoped>
+.goods-list-item{
+    width: 40vh;
+    /* flex-basis: 40%; */
+}
+.goods-list-item img{
+    width:95%;
 
+}
 </style>
