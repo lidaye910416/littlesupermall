@@ -12,8 +12,9 @@
     <tab-control :titles="['流行','新款','精选']" class="tabcontrol"
     @getcurrentItemIndex="getcurrentType"/>
     <!-- 对自定义事件还需要仔细思考 -->
-    <goods-list :goods="getGoodSItem"/>
-    
+    <!-- <goods-list :goods="getGoodsItem"/> -->
+    <home-goods-list :goods="getGoodsItem"/>
+        
   </div>
 </template>
 
@@ -25,6 +26,7 @@ import goodlist from 'components/content/goods/GoodsList.vue'
 import homeswiper from './childcomp/HomeSwiper.vue'; 
 import recommendview from './childcomp/RecommendView.vue';
 import featureview from './childcomp/FeatureView.vue';
+import homegoodslist from './childcomp/HomeGoodsList.vue'
 
 import {getHomeMultidata, getHomeGoods} from "network/home";
 // 上面的代码代表要在项目中不断进行解耦
@@ -36,7 +38,8 @@ export default {
     'recommend-view': recommendview,
     'feature-view': featureview,
     'tab-control': tabcontrol,
-    'goods-list':goodlist
+    'goods-list':goodlist,
+    'home-goods-list':homegoodslist
   },
   data(){
     return{
@@ -51,7 +54,7 @@ export default {
     }
   },
   computed:{
-    getGoodSItem(){
+    getGoodsItem(){
       // console.log('计算属性中的this.allgoods',this.allgoods);
       console.log('计算属性中的相应变量',this.currentType);
       return this.allgoods[this.currentType].list
@@ -97,6 +100,7 @@ export default {
 
 <style scoped>
 #home{
+  width: 100vw;
   padding-top: 44px;
   height: 100vh;
   position: relative;
@@ -104,6 +108,7 @@ export default {
 }
 
 .home-nav{
+  width: 100vw;
   background-color: var(--color-tint);
   color: #fff;
   position: fixed;
