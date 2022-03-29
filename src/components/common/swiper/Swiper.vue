@@ -144,7 +144,6 @@ export default {
             this.startX = e.touches[0].pageX;
             //The touches property returns an array of Touch objects, one for each finger that is currently touching the surface
             //似乎是第一个触碰屏幕的指头
-            console.log('touchstart 事件执行');
         },
         touchMove(e){
             //该事件在手指按下并开始拖动时起效

@@ -12,19 +12,25 @@
 import bScroll from '@better-scroll/core';
 
 export default {
-    mounted(){
-        console.log(this.$refs.scrollWrapper);
-        new bScroll(this.$refs.scrollWrapper,{
-            probeType:3,
-        })
+    data(){
+        return{
+            scroll:null,
+        }
     },
-    props:{
-        // width:{
-        //     type:Number,
-        //     default(){
-        //         return 100;
-        //     }
-        // }
+    mounted(){
+        this.scroll = new bScroll(this.$refs.scrollWrapper,{
+            probeType:3,
+        });
+        this.scroll.on('scroll',(ps)=>{
+            this.$emit('contentScroll', ps);
+        })
+
+    
+    },
+    methods:{
+        scrollTo(x, y, time=300){
+            this.scroll.scrollTo(x, y, time);            
+        }
     }
 
 }
