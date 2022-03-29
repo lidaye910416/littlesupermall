@@ -17,7 +17,7 @@ import swiper from 'components/common/swiper/Swiper.vue'
 import swiperitem from 'components/common/swiper/SwiperItem.vue'
 
 export default {
-    name: 'homeswiper',
+    name: 'home-swiper',
     props:{
       banners:{
         type:Array,

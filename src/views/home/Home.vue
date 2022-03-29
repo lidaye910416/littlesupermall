@@ -6,25 +6,32 @@
       </template>
     </nav-bar>
     <!-- <h2>首页</h2> -->
-    <home-swiper :banners="banners" />
-    <recommend-view :recommendInfo="recommend"/>
-    <feature-view/>
-    <tab-control :titles="['流行','新款','精选']" class="tabcontrol"
-    @getcurrentItemIndex="getcurrentType"/>
-    <!-- 对自定义事件还需要仔细思考 -->
-    <goods-list :goods="getGoodSItem"/>
-    
+    <scroll class="content" ref="homeScrollContent" @content-scroll="homeScroll">
+      <home-swiper :banners="banners" />
+      <recommend-view :recommendInfo="recommend"/>
+      <feature-view/>
+      <tab-control :titles="['流行','新款','精选']" class="tabcontrol"
+      @getcurrentItemIndex="getcurrentType"/>
+      <!-- 对自定义事件还需要仔细思考 -->
+      <!-- <goods-list :goods="getGoodsItem"/> -->
+      <home-goods-list :goods="getGoodsItem"/>
+    </scroll>
+    <back-top @click="btClick(0,0)" v-show="isbacktopShow"/>
   </div>
 </template>
 
 <script>
 import navbar from 'components/common/navbar/NavBar.vue';
 import tabcontrol from 'components/content/tabcontrol/TabControl.vue'
-import goodlist from 'components/content/goods/GoodsList.vue'
+import goodlist from 'components/content/goods/GoodsList.vue';
+import scroll from 'components/common/scroll/Scroll.vue';
+import backtop from 'components/common/backtop/BackTop.vue'
+ 
 
 import homeswiper from './childcomp/HomeSwiper.vue'; 
 import recommendview from './childcomp/RecommendView.vue';
 import featureview from './childcomp/FeatureView.vue';
+import homegoodslist from './childcomp/HomeGoodsList.vue'
 
 import {getHomeMultidata, getHomeGoods} from "network/home";
 // 上面的代码代表要在项目中不断进行解耦
@@ -36,13 +43,17 @@ export default {
     'recommend-view': recommendview,
     'feature-view': featureview,
     'tab-control': tabcontrol,
-    'goods-list':goodlist
+    'goods-list':goodlist,
+    'home-goods-list':homegoodslist,
+    scroll,
+    'back-top':backtop,
   },
   data(){
     return{
       banners:null,
       recommend:null,
       currentType:'pop',
+      scrollPosition:null,
       allgoods:{
         'pop':{page:0, list:[]},
         'new':{page:0, list:[]},
@@ -51,13 +62,26 @@ export default {
     }
   },
   computed:{
-    getGoodSItem(){
+    getGoodsItem(){
       // console.log('计算属性中的this.allgoods',this.allgoods);
-      console.log('计算属性中的相应变量',this.currentType);
+      // console.log('计算属性中的相应变量',this.currentType);
       return this.allgoods[this.currentType].list
+    },
+    isbacktopShow(){
+      return this.scrollPosition>1000;
     }
   },
   methods:{
+    homeScroll(pos){
+      this.scrollPosition = -pos.y;
+      // console.log(`滚动距离${pos.y}`);
+    },
+
+    btClick(x, y){
+      this.$refs.homeScrollContent.scrollTo(x,y);
+      
+    },
+    
     getcurrentType(ctype){
       this.currentType = ctype;
       console.log('home组件中的currentType',this.currentType);
@@ -97,6 +121,7 @@ export default {
 
 <style scoped>
 #home{
+  width: 100vw;
   padding-top: 44px;
   height: 100vh;
   position: relative;
@@ -104,6 +129,7 @@ export default {
 }
 
 .home-nav{
+  width: 100vw;
   background-color: var(--color-tint);
   color: #fff;
   position: fixed;
@@ -116,5 +142,15 @@ export default {
 .tabcontrol{
   position: sticky;
   top:80px
+}
+
+.content{
+  /* 这个确定视口的方式很有意思，让这个内容脱标！ */
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0px;
+  right: 0px;
+  overflow: hidden;
 }
 </style>
