@@ -10,6 +10,9 @@
 
 <script>
 import bScroll from '@better-scroll/core';
+import pullUp from '@better-scroll/pull-up';
+
+bScroll.use(pullUp);
 
 export default {
     data(){
@@ -20,9 +23,13 @@ export default {
     mounted(){
         this.scroll = new bScroll(this.$refs.scrollWrapper,{
             probeType:3,
+            pullUpLoad:true,
         });
         this.scroll.on('scroll',(ps)=>{
             this.$emit('contentScroll', ps);
+        });
+        this.scroll.on('pullingUp', ()=>{
+            this.$emit('pullingUp');
         })
 
     
@@ -30,6 +37,11 @@ export default {
     methods:{
         scrollTo(x, y, time=300){
             this.scroll.scrollTo(x, y, time);            
+        },
+        finishPullUp(){
+            this.scroll.finishPullUp();
+            // 主动调用finishPullingUp 告诉BetterScroll 准备好下一次pullingUp
+            this.scroll.refresh();
         }
     }
 

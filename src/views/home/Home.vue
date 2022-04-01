@@ -6,7 +6,10 @@
       </template>
     </nav-bar>
     <!-- <h2>首页</h2> -->
-    <scroll class="content" ref="homeScrollContent" @content-scroll="homeScroll">
+    <scroll class="content" ref="homeScrollContent" 
+    @content-scroll="homeScroll"
+    @pulling-up="homePullingUp"
+    >
       <home-swiper :banners="banners" />
       <recommend-view :recommendInfo="recommend"/>
       <feature-view/>
@@ -72,6 +75,10 @@ export default {
     }
   },
   methods:{
+    homePullingUp(){
+      this.getHomeGoodsCreated(this.currentType);
+      console.log('上拉加载更多')
+    },
     homeScroll(pos){
       this.scrollPosition = -pos.y;
       // console.log(`滚动距离${pos.y}`);
@@ -103,7 +110,7 @@ export default {
         // console.log('接收Promise中的数据后', this.allgoods);
         this.allgoods[type].page++ ;
         //这里这个代码可能有问题y
-
+        this.$refs.homeScrollContent.finishPullUp();
       })
     }
     
