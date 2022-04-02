@@ -38,10 +38,12 @@ export default {
         scrollTo(x, y, time=300){
             this.scroll.scrollTo(x, y, time);            
         },
+        refresh(){
+            this.scroll.refresh();
+        },
         finishPullUp(){
             this.scroll.finishPullUp();
             // 主动调用finishPullingUp 告诉BetterScroll 准备好下一次pullingUp
-            this.scroll.refresh();
         }
     }
 

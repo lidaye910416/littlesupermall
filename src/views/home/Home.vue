@@ -122,6 +122,10 @@ export default {
     this.getHomeGoodsCreated('new');
     this.getHomeGoodsCreated('sell');
 
+    this.$bus.on('itemImgLoaded', ()=>{
+      this.$refs.homeScrollContent.refresh();
+    })
+
   }
 }
 </script>
