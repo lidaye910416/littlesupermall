@@ -122,6 +122,13 @@ export default {
     this.getHomeGoodsCreated('new');
     this.getHomeGoodsCreated('sell');
 
+  },
+  mounted(){
+    this.$bus.on('imgLoaded', ()=>{
+      console.log('捕捉元素',this.$refs.homeScrollContent)
+      this.$refs.homeScrollContent.refresh();
+
+    })
   }
 }
 </script>

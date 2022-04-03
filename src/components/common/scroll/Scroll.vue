@@ -41,6 +41,8 @@ export default {
         finishPullUp(){
             this.scroll.finishPullUp();
             // 主动调用finishPullingUp 告诉BetterScroll 准备好下一次pullingUp
+        },
+        refresh(){
             this.scroll.refresh();
         }
     }
