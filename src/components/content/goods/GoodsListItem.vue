@@ -19,12 +19,12 @@ export default {
             }
         }
     },
-    methods: {
+    methods:{
         imgLoaded(){
-            console.log('----');
-            // this.$bus.emit('itemImgLoaded');
+            this.$bus.emit('imgLoaded',);
         }
-    },
+    }
+
 }
 </script>
 

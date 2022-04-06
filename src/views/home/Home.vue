@@ -5,16 +5,26 @@
       购物街
       </template>
     </nav-bar>
+    <tab-control 
+      :titles="['流行','新款','精选']" 
+      class="tabcontrol1"
+      @getcurrentItemIndex="getcurrentType" 
+      ref="tabControl1"
+      v-show="!isTabcontrolShowing" />
     <!-- <h2>首页</h2> -->
     <scroll class="content" ref="homeScrollContent" 
     @content-scroll="homeScroll"
     @pulling-up="homePullingUp"
     >
-      <home-swiper :banners="banners" />
+      <home-swiper :banners="banners" @swiper-loaded="swiperLoaded" />
       <recommend-view :recommendInfo="recommend"/>
       <feature-view/>
-      <tab-control :titles="['流行','新款','精选']" class="tabcontrol"
-      @getcurrentItemIndex="getcurrentType"/>
+      <tab-control 
+      :titles="['流行','新款','精选']" 
+      class="tabcontrol"
+      @getcurrentItemIndex="getcurrentType" 
+      ref="tabControl"
+      v-show="isTabcontrolShowing" />
       <!-- 对自定义事件还需要仔细思考 -->
       <!-- <goods-list :goods="getGoodsItem"/> -->
       <home-goods-list :goods="getGoodsItem"/>
@@ -57,6 +67,8 @@ export default {
       recommend:null,
       currentType:'pop',
       scrollPosition:null,
+      tabcontrolOffsetTop:0,
+      
       allgoods:{
         'pop':{page:0, list:[]},
         'new':{page:0, list:[]},
@@ -72,15 +84,29 @@ export default {
     },
     isbacktopShow(){
       return this.scrollPosition>1000;
+    },
+    isTabcontrolShowing(){
+      if (this.scrollPosition > this.tabcontrolOffsetTop){
+        return false;
+      }
+      return true;
     }
   },
   methods:{
+    swiperLoaded(){
+      //调用此函数时swiper已经加载完,$el是调用原生的offsetTop函数
+      this.tabcontrolOffsetTop = this.$refs.tabControl.$el.offsetTop;
+
+    },
+
     debounce(func, delay){
         // 这里添加一个防抖函数。
-            const timer = null;
+            let timer = null;
             return function(...args){
-                if(timer) clearInterval(timer);
-                return setTimeout(()=>{
+                if(timer) {
+                  clearInterval(timer);
+                  }
+                timer = setTimeout(()=>{
                     func.apply(this, ...args)
                 }, delay) 
             }
@@ -88,12 +114,10 @@ export default {
 
     homePullingUp(){
       this.getHomeGoodsCreated(this.currentType);
-      console.log('上拉加载更多')
     },
-    
+
     homeScroll(pos){
       this.scrollPosition = -pos.y;
-      // console.log(`滚动距离${pos.y}`);
     },
 
     btClick(x, y){
@@ -135,12 +159,14 @@ export default {
     this.getHomeGoodsCreated('sell');
 
   },
-
   mounted(){
-    // const refresh = this.debounce(this.$refs.homeScrollContent.refresh(),500)
-    // this.$bus.on('itemImgLoaded', refresh())
+    const debouncedFun = this.debounce(this.$refs.homeScrollContent.refresh, 500);
+    this.$bus.on('imgLoaded', ()=>{
+      debouncedFun();
+      // 这种引用方式形成了闭包。
+    })
 
-    // this.$bus.on('itemImgLoaded', this.$refs.homeScrollContent.refresh())
+  // this.$bus.on('imgLoaded',()=>{this.$refs.homeScrollContent.refresh()});
   }
 }
 </script>
@@ -153,7 +179,10 @@ export default {
   position: relative;
 
 }
-
+.tabcontrol1{
+  position: relative;
+  z-index: 1;
+}
 .home-nav{
   width: 100vw;
   background-color: var(--color-tint);
@@ -165,10 +194,6 @@ export default {
   z-index: 9
 }
 
-.tabcontrol{
-  position: sticky;
-  top:80px
-}
 
 .content{
   /* 这个确定视口的方式很有意思，让这个内容脱标！ */

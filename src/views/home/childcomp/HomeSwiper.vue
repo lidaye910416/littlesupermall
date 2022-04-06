@@ -4,7 +4,7 @@
       <swiper-item v-for="(item, id) in banners" :key="id">
         <template v-slot:img>
           <a :href="item.link">
-            <img :src="item.image" alt="">
+            <img :src="item.image" alt="" @load="swiperLoaded">
           </a>
         </template>
       </swiper-item>
@@ -24,6 +24,20 @@ export default {
         default(){
           return []
         }
+      }
+    },
+    data(){
+      return{
+        isLoaded:false,
+      }
+    },
+    methods:{
+      swiperLoaded(){
+        if(!this.isLoaded){
+          // 告知现在图片已经加载完毕
+          this.$emit('swiperLoaded');
+          this.isLoaded = true;
+        }  
       }
     },
     components:{
