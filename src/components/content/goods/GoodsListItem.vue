@@ -21,7 +21,8 @@ export default {
     },
     methods: {
         imgLoaded(){
-            this.$bus.emit('itemImgLoaded');
+            console.log('----');
+            // this.$bus.emit('itemImgLoaded');
         }
     },
 }

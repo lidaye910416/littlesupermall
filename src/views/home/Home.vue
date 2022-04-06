@@ -75,10 +75,22 @@ export default {
     }
   },
   methods:{
+    debounce(func, delay){
+        // 这里添加一个防抖函数。
+            const timer = null;
+            return function(...args){
+                if(timer) clearInterval(timer);
+                return setTimeout(()=>{
+                    func.apply(this, ...args)
+                }, delay) 
+            }
+        },
+
     homePullingUp(){
       this.getHomeGoodsCreated(this.currentType);
       console.log('上拉加载更多')
     },
+    
     homeScroll(pos){
       this.scrollPosition = -pos.y;
       // console.log(`滚动距离${pos.y}`);
@@ -122,10 +134,13 @@ export default {
     this.getHomeGoodsCreated('new');
     this.getHomeGoodsCreated('sell');
 
-    this.$bus.on('itemImgLoaded', ()=>{
-      this.$refs.homeScrollContent.refresh();
-    })
+  },
 
+  mounted(){
+    // const refresh = this.debounce(this.$refs.homeScrollContent.refresh(),500)
+    // this.$bus.on('itemImgLoaded', refresh())
+
+    // this.$bus.on('itemImgLoaded', this.$refs.homeScrollContent.refresh())
   }
 }
 </script>

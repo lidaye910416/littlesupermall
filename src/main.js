@@ -6,7 +6,7 @@ import mitt from 'mitt'
 
 
 const app = createApp(App);
-app.use(store).use(router).mount('#app')
+app.use(store).use(router).mount('#app');
 
 // vue3 挂载事件总线
 app.config.globalProperties.$bus = new mitt()
