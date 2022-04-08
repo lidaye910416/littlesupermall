@@ -167,6 +167,12 @@ export default {
     })
 
   // this.$bus.on('imgLoaded',()=>{this.$refs.homeScrollContent.refresh()});
+  },
+  activated(){
+    console.log('activated 测试');
+  },
+  deactivated(){
+    console.log('deactivated 测试')
   }
 }
 </script>
