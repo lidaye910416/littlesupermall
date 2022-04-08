@@ -68,6 +68,7 @@ export default {
       currentType:'pop',
       scrollPosition:null,
       tabcontrolOffsetTop:0,
+      deactivatedPosition:null,
       
       allgoods:{
         'pop':{page:0, list:[]},
@@ -93,6 +94,7 @@ export default {
     }
   },
   methods:{
+    
     swiperLoaded(){
       //调用此函数时swiper已经加载完,$el是调用原生的offsetTop函数
       this.tabcontrolOffsetTop = this.$refs.tabControl.$el.offsetTop;
@@ -148,8 +150,8 @@ export default {
         //这里这个代码可能有问题y
         this.$refs.homeScrollContent.finishPullUp();
       })
-    }
-    
+    },
+   
   },
   created(){
     //生命周期函数，组件一创建立马发送网络请求
@@ -165,9 +167,18 @@ export default {
       debouncedFun();
       // 这种引用方式形成了闭包。
     })
-
   // this.$bus.on('imgLoaded',()=>{this.$refs.homeScrollContent.refresh()});
+  },
+  deactivated(){
+    //组件销毁时记录位置
+    this.deactivatedPosition = this.scrollPosition;
+  },
+  activated(){
+    //组件重新激活时，滚动到之前的位置
+    this.$refs.homeScrollContent.scrollTo(0, -this.deactivatedPosition, 0);
+    this.$refs.homeScrollContent.refresh();
   }
+  
 }
 </script>
 

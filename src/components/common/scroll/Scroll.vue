@@ -33,8 +33,6 @@ export default {
         this.scroll.on('pullingUp', ()=>{
             this.$emit('pullingUp');
         })
-
-    
     },
     methods:{
         
@@ -50,7 +48,6 @@ export default {
             // 主动调用finishPullingUp 告诉BetterScroll 准备好下一次pullingUp
         },
         refresh(){
-            console.log('调用刷新');
             this.scroll.refresh();
         }
     }

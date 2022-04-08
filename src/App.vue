@@ -1,5 +1,15 @@
 <template>
-  <router-view/>
+    <router-view v-slot="{Component}">
+      <!-- {{Component}} -->
+      <transition>
+        <keep-alive>
+          <component :is="Component"></component>
+        </keep-alive>
+      </transition>
+    </router-view>
+
+
+
   <div id="tab">
     <main-tabbar></main-tabbar>
   </div>
