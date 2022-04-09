@@ -2,8 +2,10 @@
   <div class="home-goods-list">
         <goods-list>
             <template v-slot:default>
-                <goods-list-item v-for="(item, index) in goods" :key="index" 
-                :goodsItem="item"/>
+                <goods-list-item v-for="(item, index) in goods" 
+                :key="index" 
+                :goodsItem="item" 
+                v-on:click="goodsItemClick(item)"/>
             </template>
         </goods-list>
   </div>
@@ -26,7 +28,18 @@ export default {
                 return [];
             }
         }
-    }
+    },
+    methods: {
+        goodsItemClick(item){
+            //点击后动态路由跳转
+            this.$router.push({
+                name:'Detail',
+                params:{
+                    id:item.iid
+                }
+            })
+        }
+    },
     
 }
 </script>

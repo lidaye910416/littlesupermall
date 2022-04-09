@@ -19,3 +19,13 @@ export function getHomeGoods(type,page){
         }
     )
 }
+
+//请求详情页数据
+export function getDetailInfo(iidVuale){
+    return request({
+        url: '/detail',
+        params:{
+            iid:iidVuale
+        }
+    })
+}

@@ -22,7 +22,9 @@ export default {
     methods:{
         imgLoaded(){
             this.$bus.emit('imgLoaded',);
-        }
+        },
+       
+    
     }
 
 }

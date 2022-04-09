@@ -6,9 +6,9 @@ const routes = [
     redirect: '/home',
   },
   {
+    name: 'Home',
     path: '/home',
     // redirect: '/',
-    name: 'Home',
     component: () => import('../views/home/Home.vue')
     //选择使用懒加载
   },
@@ -26,6 +26,11 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: () => import('../views/cart/Cart.vue')
+  },
+  {
+    path: '/detail/:id',
+    name: 'Detail',
+    component: () => import('../views/detail/Detail.vue')
   }
 ]
 
