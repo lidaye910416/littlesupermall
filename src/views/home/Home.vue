@@ -165,7 +165,8 @@ export default {
     const debouncedFun = this.debounce(this.$refs.homeScrollContent.refresh, 500);
     this.$bus.on('imgLoaded', ()=>{
       debouncedFun();
-      // 这种引用方式形成了闭包。
+      // 这种引用方式形成了闭包。使timer 始终存在不至于销毁
+      
     })
   // this.$bus.on('imgLoaded',()=>{this.$refs.homeScrollContent.refresh()});
   },

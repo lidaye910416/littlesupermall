@@ -35,10 +35,11 @@ import navbar from 'components/common/navbar/NavBar.vue';
 import detailswiper from './childcomp/DetailSwiper.vue';
 
 import {useRoute, useRouter}  from 'vue-router';
-import {reactive, onBeforeMount, computed} from 'vue';
+import {reactive, onBeforeMount, computed, onMounted} from 'vue';
 
 import {getDetailInfo} from 'network/home';
 export default {
+    name: 'detail',
     components: {
         'nav-bar': navbar,
         'detail-swiper': detailswiper,
@@ -49,21 +50,36 @@ export default {
         const route = useRoute();
         const router = useRouter();
         // let tid =ref(route.params.id);
+        const goods = {
+            title: '',
+            desc: '',
+            newPrice:'',
+            oldPrice:'',
+            discout:'',
+            columns:'',
+            services:'',
+            realPrice:'',
+            imgList:[]
+        };
         const detailInf = reactive({
             tid:route.params.id,
-            detailResult:{},
+            goods,
             titles:['商品','参数','评价','详情'],
             currIndex:0
         });
         onBeforeMount(()=>{
             getDetailInfo(detailInf.tid).then(res=>{
-                detailInf.detailResult = res;
+                // detailInf.detailResult = res;
+                console.log(goods.imgList);
+                detailInf.goods.imgList = res.result.itemInfo.topImages;
+                console.log(goods.imgList);
             })
         });
 
         let getbannerImgs = computed(()=>{
             //以下代码会报错，最简单的处理是用try 包裹一下
-            return detailInf.detailResult.result.itemInfo.topImages;
+
+            return detailInf.goods.imgList;
         });        
 
         //获取详情页的网络请求
