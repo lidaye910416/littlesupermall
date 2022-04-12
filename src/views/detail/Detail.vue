@@ -26,6 +26,8 @@
             <detail-swiper
             :banners="getbannerImgs"  />
         </div>
+        <detail-base-info :goods="detailInf.goods"/>
+
     </div>
   
 </template>
@@ -33,6 +35,7 @@
 <script>
 import navbar from 'components/common/navbar/NavBar.vue';
 import detailswiper from './childcomp/DetailSwiper.vue';
+import DetailBaseInfo from './childcomp/DetailBaseInfo.vue'
 
 import {useRoute, useRouter}  from 'vue-router';
 import {reactive, onBeforeMount, computed, onMounted} from 'vue';
@@ -43,6 +46,7 @@ export default {
     components: {
         'nav-bar': navbar,
         'detail-swiper': detailswiper,
+        'detail-base-info': DetailBaseInfo
         
     },
     setup(){
@@ -56,8 +60,8 @@ export default {
             newPrice:'',
             oldPrice:'',
             discout:'',
-            columns:'',
-            services:'',
+            columns:[],
+            services:[],
             realPrice:'',
             imgList:[]
         };
@@ -70,9 +74,16 @@ export default {
         onBeforeMount(()=>{
             getDetailInfo(detailInf.tid).then(res=>{
                 // detailInf.detailResult = res;
-                console.log(goods.imgList);
                 detailInf.goods.imgList = res.result.itemInfo.topImages;
-                console.log(goods.imgList);
+                detailInf.goods.title = res.result.itemInfo.title;
+                detailInf.goods.desc = res.result.itemInfo.desc;
+                detailInf.goods.newPrice = res.result.itemInfo.price;
+                detailInf.goods.oldPrice = res.result.itemInfo.oldPrice;
+                detailInf.goods.discout = res.result.itemInfo.discountDesc;
+                detailInf.goods.columns = res.result.columns;
+                detailInf.goods.services = res.result.shopInfo.services;
+                detailInf.goods.realPrice = res.result.itemInfo.lowNowPrice;
+                
             })
         });
 

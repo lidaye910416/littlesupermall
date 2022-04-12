@@ -98,7 +98,6 @@ export default {
     swiperLoaded(){
       //调用此函数时swiper已经加载完,$el是调用原生的offsetTop函数
       this.tabcontrolOffsetTop = this.$refs.tabControl.$el.offsetTop;
-
     },
 
     debounce(func, delay){
