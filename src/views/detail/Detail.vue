@@ -61,7 +61,8 @@ export default {
             oldPrice:'',
             discout:'',
             columns:[],
-            services:[],
+            services:[{name:'',icon:''}],
+            //这里必须要预先装填数据，否则会报错
             realPrice:'',
             imgList:[]
         };
