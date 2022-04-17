@@ -66,25 +66,44 @@ export default {
             realPrice:'',
             imgList:[]
         };
+        const shop = {
+            log: '',
+            name: '',
+            fans: '',
+            sell: '',
+            score:[],
+            goodsCount:''
+        };
         const detailInf = reactive({
-            tid:route.params.id,
+            tid:route.params.id, //取出动态路由的id属性，并向服务器发送请求
             goods,
+            shop,
             titles:['商品','参数','评价','详情'],
             currIndex:0
         });
+        let constructGoodsInfo = function(res){
+            detailInf.goods.imgList = res.result.itemInfo.topImages;
+            detailInf.goods.title = res.result.itemInfo.title;
+            detailInf.goods.desc = res.result.itemInfo.desc;
+            detailInf.goods.newPrice = res.result.itemInfo.price;
+            detailInf.goods.oldPrice = res.result.itemInfo.oldPrice;
+            detailInf.goods.discout = res.result.itemInfo.discountDesc;
+            detailInf.goods.columns = res.result.columns;
+            detailInf.goods.services = res.result.shopInfo.services;
+            detailInf.goods.realPrice = res.result.itemInfo.lowNowPrice;
+        };
+        let constructShopInfo = function(res){
+            detailInf.shop.log = res.result.shopInfo.shopLogo;
+            detailInf.shop.name = res.result.shopInfo.name;
+            detailInf.shop.fans = res.result.shopInfo.cFans;
+            detailInf.shop.sell = res.result.shopInfo.cSells;
+            detailInf.shop.score = res.result.shopInfo.score;
+            detailInf.shop.goodsCount = res.result.shopInfo.cGoods;
+        };
         onBeforeMount(()=>{
             getDetailInfo(detailInf.tid).then(res=>{
-                // detailInf.detailResult = res;
-                detailInf.goods.imgList = res.result.itemInfo.topImages;
-                detailInf.goods.title = res.result.itemInfo.title;
-                detailInf.goods.desc = res.result.itemInfo.desc;
-                detailInf.goods.newPrice = res.result.itemInfo.price;
-                detailInf.goods.oldPrice = res.result.itemInfo.oldPrice;
-                detailInf.goods.discout = res.result.itemInfo.discountDesc;
-                detailInf.goods.columns = res.result.columns;
-                detailInf.goods.services = res.result.shopInfo.services;
-                detailInf.goods.realPrice = res.result.itemInfo.lowNowPrice;
-                
+                constructGoodsInfo(res);
+                constructShopInfo(res);
             })
         });
 
