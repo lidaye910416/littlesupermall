@@ -8,7 +8,7 @@
       <div class="shop-middle-item shop-middle-left">
         <div class="info-sells">
           <div class="sells-count">
-            {{shop.sells | sellCountFilter}}
+            {{sellCountFilter}}
           </div>
           <div class="sells-text">总销量</div>
         </div>
@@ -23,6 +23,7 @@
         <table>
           <tr v-for="(item, index) in shop.score" :key="index">
             <td>{{item.name}}</td>
+            <!-- 动态绑定class -->
             <td class="score" :class="{'score-better': item.isBetter}">{{item.score}}</td>
             <td class="better" :class="{'better-more': item.isBetter}"><span>{{item.isBetter ? '高':'低'}}</span></td>
           </tr>
@@ -45,15 +46,25 @@
 		    type: Object
       }
     },
-    setup(){
-        
+    setup(props){
+        const sellCountFilter = computed(() => {
+            console.log(typeof props.shop.sell);            
+            if(props.shop.sell < 10000){
+                return props.shop.sell}
+            return (props.shop.sell / 10000).toFixed(1) + '万';
+        });
+
+
+        return {
+            sellCountFilter
+        }
     },
-    filters: {
-      sellCountFilter: function (value) {
-        if (value < 10000) return value;
-        return (value/10000).toFixed(1) + '万'
-      }
-    }
+    // filters: {
+    //   sellCountFilter: function (value) {
+    //     if (value < 10000) return value;
+    //     return (value/10000).toFixed(1) + '万'
+    //   }
+    // }
 	}
 </script>
 

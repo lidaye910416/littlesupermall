@@ -7,9 +7,6 @@
         </keep-alive>
       </transition>
     </router-view>
-
-
-
   <div id="tab">
     <main-tabbar></main-tabbar>
   </div>

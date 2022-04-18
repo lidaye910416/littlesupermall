@@ -27,6 +27,8 @@
             :banners="getbannerImgs"  />
         </div>
         <detail-base-info :goods="detailInf.goods"/>
+        <detail-shop-info :shop="detailInf.shop"/>
+        <detail-goods-info :goodsImgs="detailInf.goodsImgs"/>
 
     </div>
   
@@ -36,6 +38,8 @@
 import navbar from 'components/common/navbar/NavBar.vue';
 import detailswiper from './childcomp/DetailSwiper.vue';
 import DetailBaseInfo from './childcomp/DetailBaseInfo.vue'
+import DetailShopInfo from './childcomp/DetailShopInfo.vue'
+import DetailGoodsInfo from './childcomp/DetailGoodsInfo.vue'
 
 import {useRoute, useRouter}  from 'vue-router';
 import {reactive, onBeforeMount, computed, onMounted} from 'vue';
@@ -46,7 +50,9 @@ export default {
     components: {
         'nav-bar': navbar,
         'detail-swiper': detailswiper,
-        'detail-base-info': DetailBaseInfo
+        'detail-base-info': DetailBaseInfo,
+        'detail-shop-info': DetailShopInfo,
+        'detail-goods-info': DetailGoodsInfo
         
     },
     setup(){
@@ -67,10 +73,10 @@ export default {
             imgList:[]
         };
         const shop = {
-            log: '',
+            log: 'test',
             name: '',
             fans: '',
-            sell: '',
+            sell: 0,
             score:[],
             goodsCount:''
         };
@@ -79,7 +85,8 @@ export default {
             goods,
             shop,
             titles:['商品','参数','评价','详情'],
-            currIndex:0
+            currIndex:0,
+            goodsImgs:[],
         });
         let constructGoodsInfo = function(res){
             detailInf.goods.imgList = res.result.itemInfo.topImages;
@@ -93,7 +100,7 @@ export default {
             detailInf.goods.realPrice = res.result.itemInfo.lowNowPrice;
         };
         let constructShopInfo = function(res){
-            detailInf.shop.log = res.result.shopInfo.shopLogo;
+            detailInf.shop.logo = res.result.shopInfo.shopLogo;
             detailInf.shop.name = res.result.shopInfo.name;
             detailInf.shop.fans = res.result.shopInfo.cFans;
             detailInf.shop.sell = res.result.shopInfo.cSells;
@@ -102,8 +109,10 @@ export default {
         };
         onBeforeMount(()=>{
             getDetailInfo(detailInf.tid).then(res=>{
+                //取出相应数据
                 constructGoodsInfo(res);
                 constructShopInfo(res);
+                detailInf.goodsImgs = res.result.detailInfo.detailImage[0].list;
             })
         });
 
@@ -134,6 +143,10 @@ export default {
 </script>
 
 <style scoped>
+.nav-bar{
+    /* position:fixed; */
+    z-index: 100;
+}
 
 .middle-content{
     display: flex;
