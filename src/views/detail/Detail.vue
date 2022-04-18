@@ -143,9 +143,18 @@ export default {
 </script>
 
 <style scoped>
+#detail{
+    position:relative;
+    padding-top: 44px
+}
 .nav-bar{
-    /* position:fixed; */
+    width: 100%;
+    position:fixed;
+    left: 0;
+    right: 0;
+    top: 0;
     z-index: 100;
+    background-color: #fff;
 }
 
 .middle-content{

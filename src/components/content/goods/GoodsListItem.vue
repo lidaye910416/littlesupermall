@@ -32,9 +32,9 @@ export default {
 
 <style scoped>
     .goods-list-item{
+        position: relative;
         flex-basis: 48%;
         padding-bottom: 40px;
-        position: relative;
     }
     .goods-list-item img{
         width: 100%;
