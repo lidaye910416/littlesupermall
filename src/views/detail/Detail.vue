@@ -28,7 +28,8 @@
         </div>
         <detail-base-info :goods="detailInf.goods"/>
         <detail-shop-info :shop="detailInf.shop"/>
-        <detail-goods-info :goodsImgs="detailInf.goodsImgs"/>
+        <detail-goods-info :goodsImgs="detailInf.goodsImgs"
+        @img-loaded="imgLoaded"/>
 
     </div>
   
@@ -133,10 +134,16 @@ export default {
         function goBack(){
             router.go(-1);
         };
+
+        function imgLoaded(){
+            console.log('图片加载完成');
+        };
+
         return {
             detailInf,
             goBack,
-            getbannerImgs
+            getbannerImgs,
+            imgLoaded
         }
     }
 }
