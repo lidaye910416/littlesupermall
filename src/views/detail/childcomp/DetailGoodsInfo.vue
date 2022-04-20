@@ -21,17 +21,21 @@ export default {
 
     setup(props,context){
         let imgLoadedCount = ref(0); //图片加载完成的数量
+        let imgLength = ref(0);
+
         function imgLoaded(){
-            imgLoadedCount.value++;
+            if(++imgLoadedCount.value === imgLength.value){
+                context.emit('imgsLoaded');
+                
+            }
+
         };
+
         watch(
-            imgLoadedCount,(newVal, oldValue) => {
-                if (newVal === props.goodsImgs.length) {
-                    // 图片加载完成,发射事件
-                    console.log(newVal, props.goodsImgs.length);
-                    context.emit('imgLoaded');
-                }
+            ()=> props.goodsImgs.length ,(newVal, oldValue) => {
+                    imgLength = newVal;
             },
+
             {
                 // immediate: true
             } 
