@@ -1,60 +1,45 @@
 <template>
-    <div id="detail">
-        <nav-bar class="nav-bar">
-            <template v-slot:middle-content>
-                <div class="middle-content">
-                    <div class="middle-content-titles" 
-                    v-for="(item, index) in detailInf.titles" 
-                    :key="index"
-                    :class="{active: index===detailInf.currIndex}"
-                    @click='detailInf.currIndex=index'>
-                        {{item}}
-                    </div>
-                </div>
-            </template>
-            <template v-slot:left-content>
-                <div class="left-content"  @click="goBack">
-                    <div class="left-content-back">
-                        <i class="iconfont icon-back">
-                            +
-                        </i>
-                    </div>
-                </div>
-            </template>        
-        </nav-bar>
-        <div >
-            <detail-swiper
-            :banners="getbannerImgs"  />
-        </div>
-        <detail-base-info :goods="detailInf.goods"/>
-        <detail-shop-info :shop="detailInf.shop"/>
-        <detail-goods-info :goodsImgs="detailInf.goodsImgs"
-        @img-loaded="imgLoaded"/>
 
+    <div id="detail">
+        <detail-nav-bar :titles="detailInf.titles" 
+        @item-click="clickThenScroll"/>
+
+        <scroll class="content" ref="detailScrollContent" >
+            <div>
+                <detail-swiper
+                :banners="getbannerImgs"  />
+            </div>
+            <detail-base-info :goods="detailInf.goods"/>
+            <detail-shop-info :shop="detailInf.shop"/>
+            <detail-goods-info :goodsImgs="detailInf.goodsImgs"
+            @imgs-loaded="imgLoaded"/>
+        </scroll>
     </div>
   
 </template>
 
 <script>
-import navbar from 'components/common/navbar/NavBar.vue';
+import scroll from 'components/common/scroll/Scroll.vue';
 import detailswiper from './childcomp/DetailSwiper.vue';
-import DetailBaseInfo from './childcomp/DetailBaseInfo.vue'
-import DetailShopInfo from './childcomp/DetailShopInfo.vue'
-import DetailGoodsInfo from './childcomp/DetailGoodsInfo.vue'
+import DetailBaseInfo from './childcomp/DetailBaseInfo.vue';
+import DetailShopInfo from './childcomp/DetailShopInfo.vue';
+import DetailGoodsInfo from './childcomp/DetailGoodsInfo.vue';
+import DetailNabBar from './childcomp/DetailNavBar.vue';
 
 import {useRoute, useRouter}  from 'vue-router';
-import {reactive, onBeforeMount, computed, onMounted} from 'vue';
+import {reactive, onBeforeMount, computed, onMounted,ref} from 'vue';
 
 import {getDetailInfo} from 'network/home';
 export default {
     name: 'detail',
+
     components: {
-        'nav-bar': navbar,
+        scroll,
         'detail-swiper': detailswiper,
         'detail-base-info': DetailBaseInfo,
         'detail-shop-info': DetailShopInfo,
-        'detail-goods-info': DetailGoodsInfo
-        
+        'detail-goods-info': DetailGoodsInfo,
+        'detail-nav-bar': DetailNabBar,
     },
     setup(){
         //学习使用setup
@@ -82,7 +67,8 @@ export default {
             goodsCount:''
         };
         const detailInf = reactive({
-            tid:route.params.id, //取出动态路由的id属性，并向服务器发送请求
+            // tid:route.params.id, //取出动态路由的id属性，并向服务器发送请求
+            tid:route.query.id, //尝试用query方式传值
             goods,
             shop,
             titles:['商品','参数','评价','详情'],
@@ -119,7 +105,6 @@ export default {
 
         let getbannerImgs = computed(()=>{
             //以下代码会报错，最简单的处理是用try 包裹一下
-
             return detailInf.goods.imgList;
         });        
 
@@ -135,14 +120,23 @@ export default {
             router.go(-1);
         };
 
+        const detailScrollContent = ref(); //用来获取组件的dom元素,必须和组件上挂载的元素同名。
+
         function imgLoaded(){
-            console.log('图片加载完成');
+            detailScrollContent.value.refresh();
         };
+
+        function clickThenScroll(index){
+            detailInf.currIndex = index;
+            detailScrollContent.value.scrollTo('.content>div:nth-child('+(index+1)+')',500);
+        };
+        
 
         return {
             detailInf,
             goBack,
             getbannerImgs,
+            detailScrollContent,
             imgLoaded
         }
     }
@@ -151,34 +145,24 @@ export default {
 
 <style scoped>
 #detail{
+    
     position:relative;
-    padding-top: 44px
-}
-.nav-bar{
-    width: 100%;
-    position:fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 100;
-    background-color: #fff;
+    padding-top: 44px; 
+    width: 100vw;
+    height: 100vh;
 }
 
-.middle-content{
-    display: flex;
-    justify-content: space-between;
+.content{
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0px;
+    right: 0px;
+    overflow: hidden;
 }
 
-.middle-content-titles {
-    flex: 1;
-}
-
-.active{
-    color: #ff6700;
-}
-
-.left-content{
+/* .left-content{
     width: 100%;
     height: 100%;
-}
+} */
 </style>

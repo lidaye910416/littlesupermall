@@ -28,7 +28,8 @@ const routes = [
     component: () => import('../views/cart/Cart.vue')
   },
   {
-    path: '/detail/:id',
+    path: '/detail',
+    // path: '/detail/:id', 这是通过params的方式获取路由
     name: 'Detail',
     component: () => import('../views/detail/Detail.vue')
   }

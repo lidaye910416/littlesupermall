@@ -48,7 +48,6 @@
     },
     setup(props){
         const sellCountFilter = computed(() => {
-            console.log(typeof props.shop.sell);            
             if(props.shop.sell < 10000){
                 return props.shop.sell}
             return (props.shop.sell / 10000).toFixed(1) + '万';

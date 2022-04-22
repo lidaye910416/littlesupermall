@@ -34,9 +34,12 @@ export default {
             //点击后动态路由跳转
             this.$router.push({
                 name:'Detail',
-                params:{
+                query:{
                     id:item.iid
-                }
+                } //尝试使用query方式传值。
+                // params:{
+                //     id:item.iid
+                // }
             })
         }
     },

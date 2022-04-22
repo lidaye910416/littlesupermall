@@ -25,6 +25,8 @@ export default {
 
         function imgLoaded(){
             if(++imgLoadedCount.value === imgLength.value){
+                
+                console.log('图片加载完成');
                 context.emit('imgsLoaded');
                 
             }
@@ -33,7 +35,7 @@ export default {
 
         watch(
             ()=> props.goodsImgs.length ,(newVal, oldValue) => {
-                    imgLength = newVal;
+                    imgLength.value = newVal;
             },
 
             {
