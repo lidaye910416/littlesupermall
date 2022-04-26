@@ -13,6 +13,8 @@
             <detail-shop-info :shop="detailInf.shop"/>
             <detail-goods-info :goodsImgs="detailInf.goodsImgs"
             @imgs-loaded="imgLoaded"/>
+            <detail-para-info :paramInfo="detailInf.goodsPara"/>
+            
         </scroll>
     </div>
   
@@ -25,11 +27,13 @@ import DetailBaseInfo from './childcomp/DetailBaseInfo.vue';
 import DetailShopInfo from './childcomp/DetailShopInfo.vue';
 import DetailGoodsInfo from './childcomp/DetailGoodsInfo.vue';
 import DetailNabBar from './childcomp/DetailNavBar.vue';
+import DetailParaInfo from './childcomp/DetailParaInfo.vue';
 
 import {useRoute, useRouter}  from 'vue-router';
 import {reactive, onBeforeMount, computed, onMounted,ref} from 'vue';
 
 import {getDetailInfo} from 'network/home';
+import {getDetailImg, constructInfos} from 'network/detail';
 export default {
     name: 'detail',
 
@@ -40,6 +44,7 @@ export default {
         'detail-shop-info': DetailShopInfo,
         'detail-goods-info': DetailGoodsInfo,
         'detail-nav-bar': DetailNabBar,
+        'detail-para-info': DetailParaInfo
     },
     setup(){
         //学习使用setup
@@ -66,15 +71,23 @@ export default {
             score:[],
             goodsCount:''
         };
+        const goodsPara = {
+            imgs:[],
+            infos:'',
+            sizes:''
+        }
         const detailInf = reactive({
             // tid:route.params.id, //取出动态路由的id属性，并向服务器发送请求
             tid:route.query.id, //尝试用query方式传值
             goods,
             shop,
+            goodsPara,
             titles:['商品','参数','评价','详情'],
             currIndex:0,
             goodsImgs:[],
+
         });
+
         let constructGoodsInfo = function(res){
             detailInf.goods.imgList = res.result.itemInfo.topImages;
             detailInf.goods.title = res.result.itemInfo.title;
@@ -94,12 +107,22 @@ export default {
             detailInf.shop.score = res.result.shopInfo.score;
             detailInf.shop.goodsCount = res.result.shopInfo.cGoods;
         };
+
+        let constructGoodsParams = function(res){
+            detailInf.goodsPara.imgs = res.result.itemParams.info.imgs? 
+            res.result.itemParams.info.imgs[0]:''; //如果没有图片，则赋值为空
+            detailInf.goodsPara.infos = res.result.itemParams.info.set;
+            detailInf.goodsPara.sizes = res.result.itemParams.rule.tables;
+        };
+        
         onBeforeMount(()=>{
             getDetailInfo(detailInf.tid).then(res=>{
                 //取出相应数据
+                const webInfo = 
                 constructGoodsInfo(res);
                 constructShopInfo(res);
                 detailInf.goodsImgs = res.result.detailInfo.detailImage[0].list;
+                constructGoodsParams(res);
             })
         });
 
